@@ -1,34 +1,42 @@
 # Justfile for Messaging API Backend Assignment
 
-# Install Python dependencies
+# Development commands
 install:
 	pip install -r requirements.txt
 
-# Run the FastAPI app
 dev:
 	uvicorn app.main:app --reload
 
-# Start services using Docker Compose
-up:
-	docker-compose up -d
-
-# Stop services
-down:
-	docker-compose down
-
-# Run database migrations (if using Alembic)
+# Database commands
 migrate:
 	alembic upgrade head
 
-# Run tests
+# Docker commands
+up:
+	docker-compose up -d
+
+down:
+	docker-compose down
+
+# Testing commands
 test:
 	pytest
 
-# Format code using black and isort
+# Code formatting
 format:
 	black .
 	isort .
 
-# Run the MCP server (optional)
+# Optional: MCP server
 mcp:
-	uvicorn app.mcp_server:app --reload
+	uvicorn app.mcp_server:app --reload --port 8001
+
+# Create new migration
+create-migration message:
+	alembic revision --autogenerate -m "{{message}}"
+
+# Initialize database
+init-db:
+	alembic init alembic
+	alembic revision --autogenerate -m "Initial migration"
+	alembic upgrade head

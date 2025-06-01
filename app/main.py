@@ -1,8 +1,32 @@
 # Entry point for FastAPI app
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+from . import models, routes
+from .db import engine
+
+# Create database tables
+models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI(
+    title="Messaging System API",
+    description="Backend messaging system API for River Flow Solutions",
+    version="1.0.0"
+)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include routes
+app.include_router(routes.router, prefix="/api/v1")
+
 
 @app.get("/")
-def read_root():
-    return {"message": "Hello, world!"}
+async def root():
+    return {"message": "Welcome to Messaging System API"}

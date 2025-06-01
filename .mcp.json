@@ -1,1 +1,68 @@
-# MCP manifest (optional)
+{
+    "schema_version": "v1",
+    "name": "messaging-system",
+    "description": "Messaging System MCP Integration",
+    "tools": [
+        {
+            "name": "create_user",
+            "description": "Create a new user in the messaging system",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "description": "User's email address"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "User's full name"
+                    }
+                },
+                "required": ["email", "name"]
+            }
+        },
+        {
+            "name": "send_message",
+            "description": "Send a message to one or more recipients",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "sender_id": {
+                        "type": "string",
+                        "description": "UUID of the sender"
+                    },
+                    "recipient_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "List of recipient UUIDs"
+                    },
+                    "subject": {
+                        "type": "string",
+                        "description": "Message subject"
+                    },
+                    "content": {
+                        "type": "string",
+                        "description": "Message content"
+                    }
+                },
+                "required": ["sender_id", "recipient_ids", "content"]
+            }
+        },
+        {
+            "name": "get_messages",
+            "description": "Get all messages for a user",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "user_id": {
+                        "type": "string",
+                        "description": "UUID of the user"
+                    }
+                },
+                "required": ["user_id"]
+            }
+        }
+    ]
+}
