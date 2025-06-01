@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from . import models, routes
 from .db import engine
+from .mcp_server import app as mcp_app
 
 # Create database tables
 models.Base.metadata.create_all(bind=engine)
@@ -25,6 +26,7 @@ app.add_middleware(
 
 # Include routes
 app.include_router(routes.router, prefix="/api/v1")
+app.mount("/mcp", mcp_app)
 
 
 @app.get("/")

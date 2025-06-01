@@ -18,6 +18,9 @@ up:
 down:
 	docker-compose down
 
+build:
+	docker-compose up --build -d
+
 # Testing commands
 test:
 	pytest
@@ -29,7 +32,7 @@ format:
 
 # Optional: MCP server
 mcp:
-	uvicorn app.mcp_server:app --reload --port 8001
+	python -m app.mcp_server
 
 # Create new migration
 create-migration message:
