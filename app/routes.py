@@ -1,7 +1,7 @@
 # FastAPI routes
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from typing import List
 from datetime import datetime, timezone
 import uuid
@@ -93,12 +93,16 @@ def get_unread_messages(user_id: uuid.UUID, db: Session = Depends(get_db)):
     )
 
 
-@router.get("/messages/{message_id}", response_model=schemas.MessageWithRecipients)
+@router.get("/messages/{message_id}", response_model=schemas.Message)
 def get_message(message_id: uuid.UUID, db: Session = Depends(get_db)):
-    message = db.query(models.Message).filter(
-        models.Message.id == message_id).first()
+    message = (
+        db.query(models.Message)
+        .filter(models.Message.id == message_id)
+        .first()
+    )
     if not message:
         raise HTTPException(status_code=404, detail="Message not found")
+
     return message
 
 
